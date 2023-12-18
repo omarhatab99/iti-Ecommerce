@@ -1,6 +1,8 @@
 const darkMode = document.querySelectorAll(".dark-mode span");
 const sideMenuToggleBtn = document.getElementById("menu");
 const sideMenu = document.querySelector("aside");
+const sidebarLinks = document.querySelectorAll(".sidebar > a");
+const sections = document.querySelectorAll("main section");
 
 
 //check dark mode
@@ -38,3 +40,21 @@ darkMode.forEach((btn) => {
 sideMenuToggleBtn.addEventListener("click" , function() {
     sideMenu.classList.toggle("open");
 });
+
+
+//generate sidebar tabs 
+sidebarLinks.forEach((sidebarLink) => {
+    sidebarLink.addEventListener("click" , function() {
+        //remove class active from all 
+        sidebarLinks.forEach(link => link.classList.remove("active"));
+
+        //display none for each sections
+        sections.forEach((section) => section.style.display = "none");
+
+        //show target section
+        document.querySelector(this.dataset.cont).style.display = "block";
+
+        //set class active on target
+        this.classList.add("active");
+    });
+})

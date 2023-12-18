@@ -1,5 +1,5 @@
 {
-  "name": "ecommerceapp",
+  "name": "e-commerce",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,8 +12,6 @@
     "vite": "^5.0.8"
   },
   "dependencies": {
-    "firebase": "^10.7.1",
-    "moment": "^2.29.4",
-    "sweetalert2": "^11.10.1"
+    "firebase": "^10.7.1"
   }
 }

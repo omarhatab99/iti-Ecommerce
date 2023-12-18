@@ -1,39 +1,17 @@
-//import
-import { authenticationHandle } from "./source/js/authentication.js";
-import { productsHandle } from "./source/js/products.js";
+
 import { initializeApp } from "firebase/app";
-import {getFirestore} from "firebase/firestore";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
-
+// Your web app's Firebase configuration
 const firebaseConfig = {
-
-  apiKey: "AIzaSyBQqrlQng59DqIu-vB8E6sBu_Kevo_QTpA",
-
-  authDomain: "ecommerce-fire-aff83.firebaseapp.com",
-
-  projectId: "ecommerce-fire-aff83",
-
-  storageBucket: "ecommerce-fire-aff83.appspot.com",
-
-  messagingSenderId: "482274549435",
-
-  appId: "1:482274549435:web:2bec59093d33639c93139e"
-
+  apiKey: "AIzaSyBvYXdDLwLCDvrIhr-gko5sYxUa6b20GAY",
+  authDomain: "ecommerce-finalapp.firebaseapp.com",
+  projectId: "ecommerce-finalapp",
+  storageBucket: "ecommerce-finalapp.appspot.com",
+  messagingSenderId: "567588967714",
+  appId: "1:567588967714:web:f594b8a9a6a806ba3d817b"
 };
 
-
 // Initialize Firebase
-
-const app = initializeApp(firebaseConfig);
-
-
-
-
-//methods caller
-authenticationHandle(app); //handle authentication
-
-productsHandle(getFirestore()); //hande firestore
-
-
-
-
+export const app = initializeApp(firebaseConfig);
