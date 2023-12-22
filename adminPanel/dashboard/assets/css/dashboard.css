@@ -473,6 +473,10 @@ b{
 /* end main */
 /* section products */
 
+main section .card {
+    background-color: var(--color-white) !important;
+}
+
 main section .card-title {
     background-color: #f2f2f27d; 
     padding: 15px;

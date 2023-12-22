@@ -1,14 +1,19 @@
 import { onAuthStateChanged , getAuth , signOut} from "firebase/auth";
+import {createCategory, getCategories , getSingleCategoriesById, toggleStatusCategory, updateCategory } from "../../../categories/assets/js/categories";
+import { confirmationAlert } from "../../../shared/extensions";
+import Swal from "sweetalert2";
 import { app } from "../../../../main";
-//check authentication login
 
-const authentication = getAuth(app);
-
+//constants
+let updated = false;
 
 //handle dashboard methods
+const authentication = getAuth(app);
+const modelForm = document.getElementById("modalForm");
 
 const dashboardHandle = () => {
 
+    //check authentication login
     authenticationLogout();
 
     //check if user in authentication login.
@@ -44,6 +49,12 @@ const dashboardHandle = () => {
 
         }
 
+        //categories
+        getCategories();
+        toggleStateCategoryHandle();
+        showCategoryModal();
+        saveCategoryHandle(modelForm);
+        
     });
 }
 
@@ -80,51 +91,199 @@ const authenticationLogout = () => {
 
 
 
+//handle categories.
 
-let cartona = "";
+const showCategoryModal = () => {
 
-for (let index = 0; index < 20; index++) {
-    
-    cartona += 
-    `
-    <tr>
-        <td>Iphone X Max</td>
-        <td>Electric</td>
-        <td>50000$</td>
-        <td>50</td>
-        <td>
-            <button class="btn btn-warning btn-sm me-2">Edit</button>
-            <button class="btn btn-danger btn-sm">Delete</button>
-        </td>
-    </tr>
-    
-    `
+    document.addEventListener("click" , async (event) => {
+
+        if(event.target.classList.contains("js-create-category-btn"))
+        {
+
+            document.getElementById("previewImg").src = "https://www.pulsecarshalton.co.uk/wp-content/uploads/2016/08/jk-placeholder-image.jpg";
+
+
+            const myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+
+            myModal.show();
+
+            document.getElementById("exampleModalLabel").textContent = "Create new category";
+
+            document.getElementById("categoryName").value = "";
+
+            document.getElementById("categoryImage").value = "";
+            
+            document.getElementById("validationSpan").textContent = "";
+
+
+            document.getElementById("submitBtn").textContent = "Save";
+
+            document.getElementById("submitBtn").classList.replace("btn-warning" , "btn-primary");
+
+            updated = false;
+
+        }
+
+
+        
+        if(event.target.classList.contains("js-update-category-btn"))
+        {
+
+            document.getElementById("previewImg").src = "https://www.pulsecarshalton.co.uk/wp-content/uploads/2016/08/jk-placeholder-image.jpg";
+
+            //get updated object
+            const updatedCategory = await getSingleCategoriesById(event.target.dataset.id);
+
+
+            document.getElementById("previewImg").src = updatedCategory.Image[0].url;
+
+
+            const myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+
+            myModal.show();
+            
+            document.getElementById("validationSpan").textContent = "";
+
+
+            document.getElementById("categoryName").value = updatedCategory.Name;
+            document.getElementById("categoryId").value = event.target.dataset.id;
+
+
+            document.getElementById("exampleModalLabel").textContent = `Edit ${updatedCategory.Name} category`;
+
+            document.getElementById("submitBtn").textContent = "Edit";
+
+            document.getElementById("submitBtn").classList.replace("btn-primary" , "btn-warning");
+
+
+
+
+            updated = true;
+
+        }
+
+
+
+
+    });
+
     
 }
 
 
-document.querySelector("tbody").innerHTML = cartona;
 
-const myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
-
-
-document.getElementById("hamada").addEventListener("click" ,  () => {
-
-    document.getElementById("exampleModalLabel").textContent = "Create new category";
+const saveCategoryHandle = (form) => {
+    document.getElementById("submitBtn").addEventListener("click" , async (event) => {
 
 
 
+        //check update or create
+        if(updated == false) { //create
+            console.log("created");
+
+            createCategory(form).then((result) => {
+
+
+                if(result.done == true)
+                {
+
+                    document.getElementById("submitBtn").classList.remove("disabled");
+    
+                    document.getElementById("submitBtn").innerHTML = 
+                    `
+        
+                        Save
+        
+                    `
+
+                    $('#exampleModal').modal('hide');
+        
+                    form.reset();
+
+                }
+
+
+            })
+            .catch((result) => {
+
+                document.getElementById("validationSpan").textContent = result.err;
+    
+            });
+        }
+        else
+        { //update
+            console.log("updated")
+            //get categoryId from hidden input.
+            const categoryId = document.getElementById("categoryId").value;
+
+            updateCategory(form , categoryId).then((result) => {
+    
+                if(result.done == true) {
+
+                    document.getElementById("validationSpan").textContent = "";
+
+                    document.getElementById("submitBtn").classList.remove("disabled");
+    
+                    document.getElementById("submitBtn").innerHTML = 
+                    `
+        
+                        Save
+        
+                    `
+
+                    $('#exampleModal').modal('hide');
+        
+                    form.reset();
+
+                    updated = false;
+
+                }
+            }
+            
+        )
+        .catch((result) => {
+
+            document.getElementById("validationSpan").textContent = result.err;
+
+        });
+
+        }
 
 
 
-    myModal.show();
-
-    console.log(myModal);
-
-});
+    });
+}
 
 
+const toggleStateCategoryHandle = () => {
 
+    document.addEventListener("click" , (event) => {
+
+
+
+        if(event.target.classList.contains("js-toggle-category-btn")) {
+            var targetRaw = event.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement; 
+
+            confirmationAlert("Are you sure want toggle this item").then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Successfully!",
+                        text: "Your file has been changed.",
+                        icon: "success"
+                    }).then(async () => {
+                        
+                        targetRaw.classList.add("animate__animated" , "animate__shakeX");
+
+                        await toggleStatusCategory(event.target.dataset.id);
+                    })
+                }
+            });
+
+        }
+
+    });
+
+}
 
 
 dashboardHandle();

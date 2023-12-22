@@ -1,22 +1,55 @@
 
-
+import Swal from "sweetalert2";
 //get data from any form
+
+
 
 export const getFormData = (form) =>{
 
+
     const dataForm = new FormData(form);
 
-    const dataFormArr = [...dataForm];
+        dataForm.append("CreateAt" , new Date());
+        dataForm.append("LastUpdatedAt" , "");
 
-    const currentObject = new Object();
+        const dataFormArr = [...dataForm];
+
+        const currentObject = new Object();
+
+        currentObject.Status = true;
+
+        dataFormArr.forEach((element) => {
+
+            currentObject[element[0]] = element[1]
+
+        });
+
+        return currentObject;
+}
+
+export const confirmationAlert = (message) => {
+
+    return new Promise((resolve , reject) => {
 
 
-    dataFormArr.forEach((element) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: message,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, toggle it!"
+        }).then((resolvedData) => {
 
-        currentObject[element[0]] = element[1]
 
-    });
+            resolve(resolvedData);
 
-    return currentObject;
+
+        });
+
+
+    })
+
 
 }
