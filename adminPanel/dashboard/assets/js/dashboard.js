@@ -22,6 +22,14 @@ const dashboardHandle = () => {
         console.log(user);
         if(user){
 
+            //handle loading
+            document.querySelector(".overlay-loading").style.display = "none";
+
+            //handle loading
+            document.body.onload = function(){
+                document.querySelector(".overlay-loading").style.display = "none";
+            }
+
             document.querySelector(".dropdown").innerHTML = 
             `
             
@@ -48,19 +56,24 @@ const dashboardHandle = () => {
             `
 
         }
-
-        //categories
-        getCategories();
-        toggleStateCategoryHandle();
-        showCategoryModal();
-        saveCategoryHandle(modelForm);
+        else
+        {
+            location.assign("/adminPanel/authentication/login");
+        }
         
     });
+
+
+    //categories
+    getCategories();
+    toggleStateCategoryHandle();
+    showCategoryModal();
+    saveCategoryHandle(modelForm);
 }
 
 
 
-
+document.body.onmouseover
 
 const authenticationLogout = () => {
 
@@ -287,3 +300,4 @@ const toggleStateCategoryHandle = () => {
 
 
 dashboardHandle();
+

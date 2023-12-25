@@ -471,7 +471,7 @@ b{
 
 
 /* end main */
-/* section products */
+/* general card style */
 
 main section .card {
     background-color: var(--color-white) !important;

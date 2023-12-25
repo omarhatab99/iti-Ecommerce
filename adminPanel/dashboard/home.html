@@ -15,12 +15,17 @@
         <link rel="stylesheet" href="assets/datatables/responsive.bootstrap5.css">
         <link rel="stylesheet" href="assets/datatables/datatables.checkboxes.css">
         <link rel="stylesheet" href="assets/datatables/buttons.bootstrap5.css">
-
+        <link rel="stylesheet" href="../../public/css/public.css">
         <link rel="stylesheet" href="assets/css/dashboard.css"/>
         <title>Admin Panel Dashboard E-commerce</title>
     </head>
 
     <body>
+        <!-- start loading -->
+        <div class="overlay-loading">
+            <img src="../../public/images/loading.gif" width="100" />
+        </div>
+        <!-- end loading -->
         <!-- start header -->
         <section id="header" class="header">
             <!-- start navbar -->
@@ -160,7 +165,7 @@
                                         </span>
                                         Products
                                     </div>
-                                    <button class="btn btn-primary btn-sm">Create</button>
+                                    <a href="../products/create" class="btn btn-primary btn-sm">Create</a>
                                 </h5>   
                                 <div class="card-body">
                                     <div class="card-datatable table-responsive">
