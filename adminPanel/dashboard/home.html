@@ -15,7 +15,7 @@
         <link rel="stylesheet" href="assets/datatables/responsive.bootstrap5.css">
         <link rel="stylesheet" href="assets/datatables/datatables.checkboxes.css">
         <link rel="stylesheet" href="assets/datatables/buttons.bootstrap5.css">
-        <link rel="stylesheet" href="../../public/css/public.css">
+        <link rel="stylesheet" href="/css/public.css">
         <link rel="stylesheet" href="assets/css/dashboard.css"/>
         <title>Admin Panel Dashboard E-commerce</title>
     </head>
@@ -23,7 +23,7 @@
     <body>
         <!-- start loading -->
         <div class="overlay-loading">
-            <img src="../../public/images/loading.gif" width="100" />
+            <img src="/images/loading.gif" width="70" />
         </div>
         <!-- end loading -->
         <!-- start header -->
@@ -169,17 +169,19 @@
                                 </h5>   
                                 <div class="card-body">
                                     <div class="card-datatable table-responsive">
-                                        <table class="datatables-basic table table-hover table-stripped table-border">
+                                        <table class="datatables-products-basic table table-hover table-stripped table-border">
                                             <thead class="text-center">
                                                 <tr class="text-center">
-                                                    <th class="text-center">Name</th>
-                                                    <th class="text-center">Category</th>
+                                                    <th>Name</th>
                                                     <th class="text-center">Price</th>
                                                     <th class="text-center">Quantity</th>
+                                                    <th class="text-center">CreateAt</th>
+                                                    <th class="text-center">LastUpdatedAt</th>
                                                     <th class="text-center">Actions</th>
                                                 </tr>
                                             </thead>
-                                            <tbody class="text-center">
+                                            <tbody id="productsDataContainer" class="text-center">
+                                                
                                             </tbody>
                                         </table>
                                     </div>

@@ -3,6 +3,7 @@ import {createCategory, getCategories , getSingleCategoriesById, toggleStatusCat
 import { confirmationAlert } from "../../../shared/extensions";
 import Swal from "sweetalert2";
 import { app } from "../../../../main";
+import { deleteProduct, getAllProducts, toggleStatusProduct } from "../../../products/assets/js/product";
 
 //constants
 let updated = false;
@@ -69,11 +70,16 @@ const dashboardHandle = () => {
     toggleStateCategoryHandle();
     showCategoryModal();
     saveCategoryHandle(modelForm);
+
+    //products
+    getAllProducts();
+    toggleStateProductHandle();
+    deleteProductHandle();
+
 }
 
 
 
-document.body.onmouseover
 
 const authenticationLogout = () => {
 
@@ -277,7 +283,7 @@ const toggleStateCategoryHandle = () => {
         if(event.target.classList.contains("js-toggle-category-btn")) {
             var targetRaw = event.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement; 
 
-            confirmationAlert("Are you sure want toggle this item").then((result) => {
+            confirmationAlert("Are you sure want toggle this item" , "toggle").then((result) => {
                 if (result.isConfirmed) {
                     Swal.fire({
                         title: "Successfully!",
@@ -297,6 +303,69 @@ const toggleStateCategoryHandle = () => {
     });
 
 }
+
+
+const toggleStateProductHandle = () => {
+
+    document.addEventListener("click" , (event) => {
+
+
+
+        if(event.target.classList.contains("js-toggle-product-btn")) {
+            var targetRaw = event.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement; 
+
+            confirmationAlert("Are you sure want toggle this item" , "toggle").then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Successfully!",
+                        text: "Your file has been changed.",
+                        icon: "success"
+                    }).then(async () => {
+                        
+                        targetRaw.classList.add("animate__animated" , "animate__shakeX");
+
+                        await toggleStatusProduct(event.target.dataset.id);
+                    })
+                }
+            });
+
+        }
+
+    });
+
+}
+
+
+
+const deleteProductHandle = () => {
+
+    document.addEventListener("click" , (event) => {
+
+
+
+        if(event.target.classList.contains("js-delete-product-btn")) {
+            var targetRaw = event.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement; 
+            confirmationAlert("Are you sure want delete this item" , "delete").then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Successfully!",
+                        text: "Your file has been changed.",
+                        icon: "success"
+                    }).then(async () => {
+                        await deleteProduct(event.target.dataset.id);
+                    })
+                }
+            });
+
+        }
+
+    });
+
+}
+
+
+//handle products
+
 
 
 dashboardHandle();

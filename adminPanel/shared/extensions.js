@@ -27,7 +27,9 @@ export const getFormData = (form) =>{
         return currentObject;
 }
 
-export const confirmationAlert = (message) => {
+
+
+export const confirmationAlert = (message , action) => {
 
     return new Promise((resolve , reject) => {
 
@@ -39,7 +41,7 @@ export const confirmationAlert = (message) => {
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, toggle it!"
+            confirmButtonText: `Yes, ${action} it!`
         }).then((resolvedData) => {
 
 
