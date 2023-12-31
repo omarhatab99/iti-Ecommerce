@@ -2,8 +2,10 @@ import { onAuthStateChanged , getAuth , signOut} from "firebase/auth";
 import {createCategory, getCategories , getSingleCategoriesById, toggleStatusCategory, updateCategory } from "../../../categories/assets/js/categories";
 import { confirmationAlert } from "../../../shared/extensions";
 import Swal from "sweetalert2";
-import { app } from "../../../../main";
+import { app} from "../../../../main";
 import { deleteProduct, getAllProducts, toggleStatusProduct } from "../../../products/assets/js/product";
+import { createUserHandle, getAllUser, getSingleUserById } from "../../../users/assets/js/users";
+import { doc, getFirestore, onSnapshot } from "firebase/firestore";
 
 //constants
 let updated = false;
@@ -11,6 +13,10 @@ let updated = false;
 //handle dashboard methods
 const authentication = getAuth(app);
 const modelForm = document.getElementById("modalForm");
+const userForm = document.getElementById("userForm");
+const firestore = getFirestore();
+
+
 
 const dashboardHandle = () => {
 
@@ -20,42 +26,42 @@ const dashboardHandle = () => {
     //check if user in authentication login.
     onAuthStateChanged(authentication , (user) => {
 
-        console.log(user);
+
         if(user){
 
             //handle loading
             document.querySelector(".overlay-loading").style.display = "none";
 
-            //handle loading
-            document.body.onload = function(){
-                document.querySelector(".overlay-loading").style.display = "none";
-            }
+            //user
+            const documentationReference = doc(firestore , "Users" , user.uid);
+            onSnapshot(documentationReference , (snapshot) => {
 
-            document.querySelector(".dropdown").innerHTML = 
-            `
-            
-            <a class="text-decoration-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <div class="profile-info d-flex justify-content-center align-items-center">
-                    <div class="info text-dark px-3">
-                        <p class="pb-0 mb-0">Hey, <b>${user.email}</b></p>
-                        <small>Admin</small>
+                const data = snapshot.data();
+
+                document.querySelector(".dropdown").innerHTML = 
+                `
+                <a class="text-decoration-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="profile-info d-flex justify-content-center align-items-center">
+                        <div class="info text-dark px-3">
+                            <p class="pb-0 mb-0">Hey, <b>${data.Username}</b></p>
+                            <small>${data.Role.toLowerCase()}</small>
+                        </div>
+                        <div class="profile-photo d-flex align-items-center">
+                            <img width="40" height="40" src="${!data.ProfileImage.imageUrl ? '../dashboard/assets/images/avatar.png' : data.ProfileImage.imageUrl}">
+                        </div>
                     </div>
-                    <div class="profile-photo d-flex align-items-center">
-                        <img class="img-thumbnail rounded-circle" width="45" height="45" src="assets/images/avatar.png">
-                    </div>
-                </div>
-            </a>
-            <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item logout-btn" href="javascript:;">Logout</a></li>
-            </ul>
-
-            
-            `
-
+                </a>
+                <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/adminPanel/users/profile?id=${user.uid}">Profile</a></li>
+                <li><a class="dropdown-item" href="/adminPanel/users/changeEmail?id=${user.uid}">Change Email</a></li>
+                <li><a class="dropdown-item" href="/adminPanel/users/changePassword?id=${user.uid}">Change Password</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item logout-btn" href="javascript:;">Logout</a></li>
+                </ul>
+    
+                
+                `
+            });
         }
         else
         {
@@ -64,7 +70,10 @@ const dashboardHandle = () => {
         
     });
 
-
+    //users
+    getAllUser();
+    showUsersModal();
+    createUser();
     //categories
     getCategories();
     toggleStateCategoryHandle();
@@ -190,7 +199,6 @@ const showCategoryModal = () => {
 }
 
 
-
 const saveCategoryHandle = (form) => {
     document.getElementById("submitBtn").addEventListener("click" , async (event) => {
 
@@ -304,6 +312,7 @@ const toggleStateCategoryHandle = () => {
 
 }
 
+//handle products
 
 const toggleStateProductHandle = () => {
 
@@ -364,7 +373,108 @@ const deleteProductHandle = () => {
 }
 
 
-//handle products
+//handle users
+const showUsersModal = () => {
+
+    document.addEventListener("click" , async (event) => {
+
+        if(event.target.classList.contains("js-create-user-btn"))
+        {
+
+            const myModal = new bootstrap.Modal(document.getElementById('usersModal'));
+
+            myModal.show();
+
+            document.getElementById("userTitle").textContent = "Create new User";
+
+            document.getElementById("userEmail").value = "";
+
+            document.getElementById("userPassword").value = "";
+            
+            document.getElementById("validationUserSpan").textContent = "";
+
+
+            document.getElementById("submitUserBtn").textContent = "Save";
+
+            document.getElementById("submitUserBtn").classList.replace("btn-warning" , "btn-primary");
+
+        }
+
+
+        
+        if(event.target.classList.contains("js-update-user-btn"))
+        {
+
+            //get updated object
+            const updatedUser = await getSingleUserById(event.target.dataset.id);
+
+            console.log(updatedUser)
+
+            const myModal = new bootstrap.Modal(document.getElementById('usersModal'));
+
+            myModal.show();
+            
+            document.getElementById("validationUserSpan").textContent = "";
+
+
+            document.getElementById("userEmail").value = updatedUser.Email;
+            document.getElementById("userId").value = event.target.dataset.id;
+
+            document.getElementById("userTitle").textContent = `Edit ${updatedUser.Username} User`;
+
+            document.getElementById("submitUserBtn").textContent = "Edit";
+
+            document.getElementById("submitUserBtn").classList.replace("btn-primary" , "btn-warning");
+
+
+
+
+            userUpdate = true;
+
+        }
+
+    });
+
+}
+
+//handle createUser for create user by admin
+const createUser = () => {
+    document.getElementById("submitUserBtn").addEventListener("click" , () => {
+
+        createUserHandle(userForm).then((data) => {
+            
+            if(data.done){
+                    document.getElementById("submitUserBtn").classList.remove("disabled");
+
+                    document.getElementById("submitUserBtn").innerHTML = 
+                    `
+                        Save
+        
+                    `
+
+                    $('#usersModal').modal('hide');
+        
+                    userForm.reset();
+
+
+                }
+                
+            })
+            .catch((data) => {
+                document.getElementById("submitUserBtn").classList.remove("disabled");
+
+                document.getElementById("submitUserBtn").innerHTML = 
+                `
+                    Save
+    
+                `
+
+                document.getElementById("validationUserSpan").textContent = data.err;
+
+            });
+
+    });
+}
 
 
 

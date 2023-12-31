@@ -33,6 +33,26 @@ export const getAllProducts = () => {
 
 }
 
+//generate datatable for products
+const generateProductsDatatable = (products) => {
+
+
+    document.getElementById("productsDataContainer").innerHTML = "";
+
+
+    $(".datatables-products-basic").DataTable().clear().draw();
+
+
+    products.forEach((product) => {
+        
+        $(".datatables-products-basic").DataTable().row.add(product).draw();
+        
+    });
+
+
+}
+
+
 //get product by id
 export const getSingleProductById = async(id) => {
 
@@ -47,27 +67,6 @@ export const getSingleProductById = async(id) => {
 
 }
 
-//generate datatable for products
-const generateProductsDatatable = (products) => {
-
-
-    document.getElementById("productsDataContainer").innerHTML = "";
-
-
-    $(".datatables-products-basic").DataTable().clear().draw();
-
-
-    products.forEach((product) => {
-        
-        console.log(product);
-
-
-        $(".datatables-products-basic").DataTable().row.add(product).draw();
-        
-    });
-
-
-}
 
 
 

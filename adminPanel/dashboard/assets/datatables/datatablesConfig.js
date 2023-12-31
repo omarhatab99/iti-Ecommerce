@@ -401,3 +401,175 @@ $(function() {
         });
     }
     });
+
+
+    //handle datatable for Users
+$(function() {
+    'use strict';
+
+    var dt_basic_table = $(".datatables-users-basic");
+
+    // DataTable with buttons
+    // --------------------------------------------------------------------
+
+    if (dt_basic_table.length) {
+        const dt_basic = dt_basic_table.DataTable({
+
+
+            columns: [
+                { data: 'Username' , name: "username" },
+                { data: 'Role' , name: "role" },
+                { data: 'CreateAt' , name: "createAt"},
+                { data: 'LastUpdatedAt' , name: "lastUpdatedAt" },
+            ],
+            columnDefs: [
+                {
+                    // For Responsive
+                    className: 'text-start',
+                    targets: 0,
+                    responsivePriority: 1,
+                    render: function (data, type, full, meta) {
+                        var $user_img = full['ProfileImage'],
+                            $name = full['Username'],
+                            $email = full['Email'];
+                        if ($user_img.imageUrl) {
+                            // For Avatar image
+                            var $output =
+                            '<img src="' + $user_img.imageUrl + '" alt="Avatar" class="rounded-circle" width="50" height="50">';
+                        } else {
+                            // For Avatar badge
+                            var stateNum = Math.floor(Math.random() * 6);
+                            var states = ['success', 'danger', 'warning', 'info', 'primary', 'secondary'];
+                            var $state = states[stateNum],
+                            $name = full['Username'],
+                            $initials = $name.match(/\b\w/g) || [];
+                            $initials = (($initials.shift() || '') + ($initials.pop() || '')).toUpperCase();
+                            $output = '<span class="avatar-initial rounded-circle bg-label-' + $state + '">' + $initials + '</span>';
+                        }
+                        // Creates full output for row
+                        var $row_output =
+                            '<div class="d-flex justify-content-start align-items-center categories-tr">' +
+                            '<div class="avatar-wrapper">' +
+                            '<div class="avatar me-2">' +
+                            $output +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="d-flex flex-column">' +
+                            '<span class="emp_name text-truncate">' +
+                            `<a href="javascript:;" class="text-dark">`+
+                            $name +
+                            `</a>`+
+                            '</span>' +
+                            '<small class="emp_post text-truncate text-muted">'
+                                +$email+
+                            '</small>' +
+                            '</div>' +
+                            '</div>';
+                        return $row_output;
+                        
+                    }
+                },
+                {
+                    // For Responsive
+                    responsivePriority: 2,
+                    targets: 1,
+                    render: function (data, type, full, meta) {
+                        return `<span style="display:inline-block; padding:3px 15px; background-color: #E4E9EE8F; color: #0989FF;"> 
+                            ${data}
+                        </span>`
+                    }
+                },
+                {
+                    // For Responsive
+                    responsivePriority: 3,
+                    targets: 2,
+                    render: function (data, type, full, meta) {
+                        return moment(data).format('MMM Do YY');
+                    }
+                },
+                {
+                    // For Responsive
+                    className: 'js-update',
+                    targets: 3,
+                    render: function (data, type, full, meta) {
+                        return `
+                            ${data == "" || data == undefined ? "no updated yet" : moment(data).format('MMM Do YY')}
+                        `
+                    }
+                }
+            ],
+    
+
+
+        order: [[2, 'desc']],
+        displayLength: 7,
+        dom: '<"flex-column flex-md-row"<"head-label text-center"><"dt-action-buttons text-end pt-3 pt-md-0"B>><"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+        lengthMenu: [7, 10, 25, 50, 75, 100],
+        buttons: [
+            {
+                extend: 'collection',
+                className: 'btn btn-label-primary dropdown-toggle me-5',
+                text: '<i class="ti ti-file-export me-sm-1"></i> <span class="d-none d-sm-inline-block">Export</span>',
+                buttons: [
+                {
+                    extend: 'print',
+                    text: '<i class="ti ti-printer me-1" ></i>Print',
+                    className: 'dropdown-item',
+                    exportOptions: { columns: [0 , 1 , 2 , 3] }
+                },
+                {
+                    extend: 'csv',
+                    text: '<i class="ti ti-file-text me-1" ></i>Csv',
+                    className: 'dropdown-item',
+                    exportOptions: { columns: [0 , 1 , 2 , 3] }
+                },
+                {
+                    extend: 'pdf',
+                    text: '<i class="ti ti-file-description me-1"></i>Pdf',
+                    className: 'dropdown-item',
+                    exportOptions: { columns: [0 , 1 , 2 , 3] }
+                },
+                {
+                    extend: 'copy',
+                    text: '<i class="ti ti-copy me-1" ></i>Copy',
+                    className: 'dropdown-item',
+                    exportOptions: { columns: [0 , 1 , 2 , 3] }
+                }
+                ]
+            },
+            ],
+            responsive: {
+                details: {
+                display: $.fn.dataTable.Responsive.display.modal({
+                    header: function (row) {
+                    var data = row.data();
+                    return 'Details of ' + data['Username'];
+                    }
+                }),
+                type: 'column',
+                renderer: function (api, rowIdx, columns) {
+                    var data = $.map(columns, function (col, i) {
+                    return col.title !== '' // ? Do not show row in modal popup if title is blank (for check box)
+                        ? '<tr data-dt-row="' +
+                            col.rowIndex +
+                            '" data-dt-column="' +
+                            col.columnIndex +
+                            '">' +
+                            '<td>' +
+                            col.title +
+                            ':' +
+                            '</td> ' +
+                            '<td>' +
+                            col.data +
+                            '</td>' +
+                            '</tr>'
+                        : '';
+                    }).join('');
+        
+                    return data ? $('<table class="table"/><tbody />').append(data) : false;
+                }
+                }
+            }
+        });
+    }
+    });
