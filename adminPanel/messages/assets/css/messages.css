@@ -1,0 +1,256 @@
+
+
+/* start profile */
+.profile-container {
+    display: flex;
+    gap: 30px;
+}
+
+
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (max-width: 1200px) {
+    .profile-container {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+.profile-container .profile-information {
+    background-color: #FFF;
+    width: 30%;
+    padding: 35px 25px;
+    border-radius: 5px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (max-width: 1200px) {
+    .profile-container .profile-information {
+        width: 100%;
+    }
+}
+
+.profile-container .message-details {
+    background-color: #FFF;
+    border-radius: 5px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    width: 70%;
+    padding: 15px;
+}
+
+@media only screen and (max-width: 1200px) {
+    .profile-container .message-details {
+        width: 100%;
+    }
+} 
+
+.profile-container .message-details .message-details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    margin: 50px 0px 15px;
+}
+
+.profile-container .message-details .message-details-header h2 {
+    font-size: 30px;
+}
+
+
+
+.profile-container .message-details .message-details-content p{
+    width: 500px;
+    overflow: hidden;
+    padding: 0px 50px
+}
+
+
+@media only screen and (max-width: 768px) {
+    .profile-container .message-details .message-details-header h2 {
+        font-size: 24px;
+    }
+    
+    .profile-container .message-details .message-details-header h3 {
+        font-size: 20px;
+    }
+} 
+
+@media only screen and (max-width: 768px) {
+    .profile-container .message-details .message-details-header h2 {
+        font-size: 18px;
+    }
+    
+    .profile-container .message-details .message-details-header h3 {
+        font-size: 14px;
+    }
+} 
+
+@media only screen and (max-width: 768px) {
+    .profile-container .message-details .message-details-content p{
+        width: 100%;
+        overflow: hidden;
+        padding: 0px;
+        text-align: center;
+    }
+} 
+
+
+
+
+
+.profile-container .message-details .message-details-body{
+    margin: 50px 50px 20px;
+    padding: 30px;
+    border-top: 1px solid #ddd;
+}
+
+
+@media only screen and (max-width: 768px) {
+    .profile-container .message-details .message-details-body{
+        margin: 50px 10px 20px;
+        padding: 15px;
+        border-top: 1px solid #ddd;
+    }
+} 
+
+
+.sum-total {
+    display: inline-block;
+    padding: 5px 15px;
+    background-color: #ecefff5e;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+}
+
+.profile-container .profile-information-card {
+    display: flex;
+    padding: 30px 0px;
+}
+
+.profile-container .profile-information-card .card-img {
+    width: 120px;
+    height: 150px;
+    border-radius: 5px;
+    position: relative;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+@media only screen and (max-width: 600px) {
+    .profile-container .profile-information-card .card-img {
+        width: 80px;
+        height: 80px;
+
+    }
+} 
+
+
+.profile-container .profile-information-card .card-img img {
+    width: 70%;
+    height: 70%;
+    border-radius: 5px;
+
+}
+
+.profile-container .profile-information-card .card-details{
+    padding: 15px 15px 0px 15px;
+}
+.profile-container .profile-information-card .card-details .product-name,
+.profile-container .profile-information-card .card-details .profile-position {
+    padding: 0px;
+    margin: 0px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-wrap: nowrap;
+    width: 100%;
+    height: 25px;
+}
+
+
+
+@media only screen and (max-width: 600px) {
+    .profile-container .profile-information-card .card-details{
+        padding: 5px 5px 5px 15px;
+    }
+    .profile-container .profile-information-card .card-details .product-name {
+        font-size: 15px;
+    }
+    .profile-container .profile-information-card .card-details .profile-position {
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+} 
+
+.profile-container .profile-information-card .card-details .profile-color {
+    background-color: #E4E9EE8F;
+    display: inline-block;
+    padding: 3px 15px;
+    color: #0989FF;
+    font-weight: bold;
+
+}
+
+.profile-container .profile-information .product-details{
+    padding: 20px 0px;
+}
+
+.profile-container .profile-information .product-details .product-details-item{
+    padding: 10px 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile-container .profile-information .product-details .product-details-item .left {
+    font-weight: bold;
+}
+
+
+.profile-container .profile-information .product-details .product-details-item .left+span {
+    color: #555;
+}
+
+@media only screen and (max-width: 600px) {
+    .profile-container .profile-information .product-details .product-details-item .left {
+        font-size: 14px;
+    }
+
+    .profile-container .profile-information .product-details .product-details-item .left+span {
+        font-size: 14px;
+    }
+} 
+
+.card .rating {
+    display: flex;
+    align-items: center;
+}
+
+.card .rating img ,
+.card .customer-rating img {
+    width: 12px;
+    height: 12px;
+    margin-right: 3px;
+}
+
+.message-details-body .rating-header {
+    text-align: end;
+}
+
+.message-details-body .customer-rating {
+    text-align: end;
+}
+
+@media only screen and (max-width: 1200px) {
+    .message-details-body .rating-header {
+        text-align: start;
+    }
+
+    .message-details-body .customer-rating {
+        text-align: start;
+    }
+} 
+/* end profile */
